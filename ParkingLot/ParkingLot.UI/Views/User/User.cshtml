@@ -1,0 +1,291 @@
+﻿
+@{
+    ViewBag.Title = "User";
+}
+
+<h2>User</h2>
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+<style type="text/css">
+    .row1 {
+        background-color: #00ffff;
+        color: black;
+    }
+
+    .row2 {
+        background-color: #e8ebef;
+        color: black;
+    }
+    .spinner {
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   height:60px;
+   width:60px;
+   margin:0px auto;
+   -webkit-animation: rotation .6s infinite linear;
+   -moz-animation: rotation .6s infinite linear;
+   -o-animation: rotation .6s infinite linear;
+   animation: rotation .6s infinite linear;
+   border-left:6px solid rgba(0,174,239,.15);
+   border-right:6px solid rgba(0,174,239,.15);
+   border-bottom:6px solid rgba(0,174,239,.15);
+   border-top:6px solid rgba(0,174,239,.8);
+   border-radius:100%;
+}
+
+@@-webkit-keyframes rotation {
+   from {-webkit-transform: rotate(0deg);}
+   to {-webkit-transform: rotate(359deg);}
+}
+@@-moz-keyframes rotation {
+   from {-moz-transform: rotate(0deg);}
+   to {-moz-transform: rotate(359deg);}
+}
+@@-o-keyframes rotation {
+   from {-o-transform: rotate(0deg);}
+   to {-o-transform: rotate(359deg);}
+}
+@@keyframes rotation {
+   from {transform: rotate(0deg);}
+   to {transform: rotate(359deg);}
+}
+</style>
+<body>
+    
+    <div id="parkingLotContainer">
+        <div ng-controller="parkingLotcontroller" >
+            <div class="spinner" ng-show="processing == true"></div>
+            <table cellpadding="5">
+                <tr>
+                    <td>Search User : </td>
+                    <td><input type="text" placeholder="Username..." width="200px" ng-model="user.UserName" />
+                    <span ng-show="user.HasError" >{{user.Error}}</span>
+                    <input type="button" ng-click="searchUser()" value="Search..." />
+                    </td>
+                </tr>
+                <tr ng-show="userList != undefined">
+                    <td>
+                        <table border="1">
+                            <thead>
+                                <br />
+                                <tr><td><b>Users</b></td> <td>User Reservation</td></tr>
+                            </thead>
+                            <tr ng-repeat="u in userList" ng-class-odd="'row1'" ng-class-even="'row2'" ng-click="setUser(u)">
+                                <td  >{{u.Firstname}} {{u.Lastname}}</td>
+                                <td>{{getReservationType(u.ReservationTypeId)}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr  ng-show="user.Vehicles != undefined">
+                    <td>
+                        <table border="1">
+                            <thead>
+                                <br />
+                                <tr><td><b>Vehicle Number </b></td>
+                                    <td><b>Vehicle Type</b></td>
+                                    <td><b>Parking Slot</b></td>
+                                    <td><b>Slot Type</b></td>
+                                    <td><b>Slot Reservation</b></td>
+                                    <td><b></b></td>
+                                </tr>
+                            </thead>
+                            <tr ng-repeat="v in user.Vehicles" ng-class-odd="'row1'" ng-class-even="'row2'">
+                                <td>{{v.VehicleNumber}}</td>
+                                <td>{{getSlotType(v.SlotTypeId)}}</td>
+                                <td>{{getParkingStatus(v.VehicleSlots)}}</td>
+                                <td>{{getParkingSlotStatus(v.VehicleSlots)}}</td>
+                                <td>{{getParkingSlotReservation(v.VehicleSlots)}}</td>
+                                <td>
+                                    <input ng-show="v.VehicleSlots.length == 0" type="button"  value="Park now" ng-click="parkVehicle(v)" />
+                                    <input ng-show="v.VehicleSlots.length > 0" type="button" value="UnPark now" ng-click="unparkVehicle(v)" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    var apiUrl = "http://localhost:65513/";
+    var module = angular.module('parkingLotModule', ['ngRoute']);
+    module.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+        $httpProvider.defaults.cache = false;
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+        // disable IE ajax request caching
+        $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Thu, 01 Jan 1970 00:00:00 GMT';
+        //.....here proceed with your routes
+    }]);
+    module.controller('parkingLotcontroller', function ($scope, $http) {
+        $scope.user = {};
+        $scope.user.HasError = false;
+        $scope.user.UserName = "test";
+        $scope.setUser = function (user) {
+            $scope.user = user;
+        }
+        $scope.getParkingStatus = function (vehicleStots) {
+            if (vehicleStots.length == 0)
+                return "Not Parked!";
+            else if (vehicleStots[0].Slot != undefined)
+                return vehicleStots[0].Slot.Id;
+            else
+                return "Vehicle Parked, but cannot determine the slot. Please contact support.";
+        }
+        $scope.getParkingSlotStatus = function (vehicleStots) {
+            if (vehicleStots.length == 0)
+                return "";
+            else if (vehicleStots[0].Slot != undefined)
+                return $scope.getReservationType(vehicleStots[0].Slot.ReservationTypeId);
+            else
+                return "Vehicle Parked, but cannot determine the slot. Please contact support.";
+        }
+        $scope.getParkingSlotReservation = function (vehicleStots) {
+            if (vehicleStots.length == 0)
+                return "";
+            else if (vehicleStots[0].Slot != undefined)
+                return $scope.getSlotType(vehicleStots[0].Slot.SlotTypeId);
+            else
+                return "Vehicle Parked, but cannot determine the slot. Please contact support.";
+        }
+        $scope.unparkVehicle = function (vehicle) {
+            var url = apiUrl + "api/vehicle/unpark/" + vehicle.VehicleSlots[0].Slot.Id;
+            var req = {
+                method: 'POST',
+                url: url,
+                data: '',
+                contentType: 'application/json' // specify content type
+            };
+            $scope.processing = true;
+            $http(req).then(function (success) {
+                $http.get(apiUrl + 'api/user/get/' + vehicle.UserId)
+                    .then(function (success) {
+                        $scope.processing = false;
+                        if (success.data) {
+                            $scope.user = success.data;
+                            var u = $.grep($scope.userList, function (e, i) {
+                                return e.Id == success.data.Id;
+                            })[0];
+                            var i = $scope.userList.indexOf(u);
+                            $scope.userList[i] = success.data;
+                        }
+                        else {
+                            $scope.user.Error = "No user found!";
+                            $scope.user.HasError = true;
+                        }
+                    }, function (error) {
+                        $scope.processing = false;
+                        $scope.user.Error = "Error while searching user list!";
+                        $scope.user.HasError = true;
+                    });
+            }, function (error) {
+            });
+        }
+        $scope.parkVehicle = function (vehicle) {
+            var url = apiUrl + "api/vehicle/park/" + vehicle.Id;
+            var req = {
+                method: 'POST',
+                url: url,
+                data: '',
+                contentType: 'application/json' // specify content type
+            };
+            $scope.processing = true;
+            $http(req).then(function (success) {
+                if (success.data && success.data.Id && success.data.Id === -1) {
+                    alert('Sorry. No parking slots available!');
+                    return;
+                }
+                $http.get(apiUrl + 'api/user/get/' + vehicle.UserId)
+                    .then(function (success) {
+                        $scope.processing = false;
+                        if (success.data) {
+                            $scope.user = success.data;
+                            var u = $.grep($scope.userList, function (e, i) {
+                                return e.Id == success.data.Id;
+                            })[0];
+                            var i = $scope.userList.indexOf(u);
+                            $scope.userList[i] = success.data;
+                        }
+                        else {
+                            $scope.user.Error = "No user found!";
+                            $scope.user.HasError = true;
+                        }
+                    }, function (error) {
+                        $scope.processing = false;
+                        $scope.user.Error = "Error while searching user list!";
+                        $scope.user.HasError = true;
+                    });
+            }, function (error) {
+            });
+        }
+        $scope.getSlotType = function (slotTypeId) {
+            if (slotTypeId == 1)
+                return "Small Vehicle";
+            if (slotTypeId == 2)
+                return "Medium Vehicle";
+            if (slotTypeId == 3)
+                return "Big Vehicle";
+
+        }
+        $scope.getReservationType = function (typeId) {
+            if (typeId == 1)
+                return "Regular";
+            if (typeId == 2)
+                return "Physically Challanged";
+            if (typeId == 3)
+                return "VIP";
+
+        }
+        
+        $scope.searchUser = function () {
+            $scope.processing = true;
+            $http.get(apiUrl + 'api/user/search/' + $scope.user.UserName)
+                .then(function (success) {
+                    var data = success.data;
+                    if (data.length > 0) {
+                        $scope.userList = data;
+                        $scope.user = data[0];
+                    }
+                    else {
+                        $scope.user.Error = "No user found!";
+                        $scope.user.HasError = true;
+                    }
+                    $scope.processing = false;
+                }, function (error) {
+                    $scope.processing = false;
+                    $scope.user.Error = "Error while searching user list!";
+                    $scope.user.HasError = true;
+                });
+        }
+        $scope.searchVehicle = function (vehicle) {
+            $http.get(apiUrl + 'api/user/search/' + $scope.user.UserName)
+                .then(function (success) {
+                    var data = success.data;
+                    if (data.length > 0) {
+                        $scope.userList = data;
+                        $scope.user = data[0];
+                    }
+                    else {
+                        $scope.user.Error = "No user found!";
+                        $scope.user.HasError = true;
+                    }
+                }, function (error) {
+                    $scope.user.Error = "Error while searching user list!";
+                    $scope.user.HasError = true;
+                });
+        }
+    });
+
+    $(document).ready(function () {
+        angular.bootstrap('#parkingLotContainer', ['parkingLotModule']);
+    });
+</script>

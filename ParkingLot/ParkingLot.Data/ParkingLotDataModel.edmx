@@ -1,0 +1,497 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ParkingLotDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ReservationType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Slot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SlotTypeId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="ReservationTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SlotType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PricePerMinute" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Firstname" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Lastname" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReservationTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="VehicleNumber" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SlotTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VehicleSlot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VehicleId" Type="int" Nullable="false" />
+          <Property Name="SlotId" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Slot_ReservationType">
+          <End Role="ReservationType" Type="Self.ReservationType" Multiplicity="1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReservationType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="ReservationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slot_SlotType">
+          <End Role="SlotType" Type="Self.SlotType" Multiplicity="1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SlotType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="SlotTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slot_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_ReservationType">
+          <End Role="ReservationType" Type="Self.ReservationType" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReservationType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ReservationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vehicle_SlotType">
+          <End Role="SlotType" Type="Self.SlotType" Multiplicity="1" />
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SlotType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vehicle">
+              <PropertyRef Name="SlotTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vehicle_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vehicle">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VehicleSlot_Slot">
+          <End Role="Slot" Type="Self.Slot" Multiplicity="1" />
+          <End Role="VehicleSlot" Type="Self.VehicleSlot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehicleSlot">
+              <PropertyRef Name="SlotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VehicleSlot_Vehicle">
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
+          <End Role="VehicleSlot" Type="Self.VehicleSlot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehicleSlot">
+              <PropertyRef Name="VehicleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ParkingLotDataModelStoreContainer">
+          <EntitySet Name="ReservationType" EntityType="Self.ReservationType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Slot" EntityType="Self.Slot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SlotType" EntityType="Self.SlotType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VehicleSlot" EntityType="Self.VehicleSlot" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Slot_ReservationType" Association="Self.FK_Slot_ReservationType">
+            <End Role="ReservationType" EntitySet="ReservationType" />
+            <End Role="Slot" EntitySet="Slot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slot_SlotType" Association="Self.FK_Slot_SlotType">
+            <End Role="SlotType" EntitySet="SlotType" />
+            <End Role="Slot" EntitySet="Slot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slot_User" Association="Self.FK_Slot_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Slot" EntitySet="Slot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_ReservationType" Association="Self.FK_User_ReservationType">
+            <End Role="ReservationType" EntitySet="ReservationType" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehicle_SlotType" Association="Self.FK_Vehicle_SlotType">
+            <End Role="SlotType" EntitySet="SlotType" />
+            <End Role="Vehicle" EntitySet="Vehicle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehicle_User" Association="Self.FK_Vehicle_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Vehicle" EntitySet="Vehicle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehicleSlot_Slot" Association="Self.FK_VehicleSlot_Slot">
+            <End Role="Slot" EntitySet="Slot" />
+            <End Role="VehicleSlot" EntitySet="VehicleSlot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehicleSlot_Vehicle" Association="Self.FK_VehicleSlot_Vehicle">
+            <End Role="Vehicle" EntitySet="Vehicle" />
+            <End Role="VehicleSlot" EntitySet="VehicleSlot" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ParkingLotDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Slot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SlotTypeId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="SlotType" Relationship="Self.FK_Slot_SlotType" FromRole="Slot" ToRole="SlotType" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Slot_User" FromRole="Slot" ToRole="User" />
+          <NavigationProperty Name="VehicleSlots" Relationship="ParkingLotDataModel.FK_VehicleSlot_Slot" FromRole="Slot" ToRole="VehicleSlot" />
+          <Property Name="ReservationTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ReservationType" Relationship="ParkingLotDataModel.FK_Slot_ReservationType" FromRole="Slot" ToRole="ReservationType" />
+        </EntityType>
+        <EntityType Name="SlotType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PricePerMinute" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Slots" Relationship="Self.FK_Slot_SlotType" FromRole="SlotType" ToRole="Slot" />
+          <NavigationProperty Name="Vehicles" Relationship="Self.FK_Vehicle_SlotType" FromRole="SlotType" ToRole="Vehicle" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Firstname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lastname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Slots" Relationship="Self.FK_Slot_User" FromRole="User" ToRole="Slot" />
+          <NavigationProperty Name="Vehicles" Relationship="Self.FK_Vehicle_User" FromRole="User" ToRole="Vehicle" />
+          <Property Name="ReservationTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ReservationType" Relationship="ParkingLotDataModel.FK_User_ReservationType" FromRole="User" ToRole="ReservationType" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="VehicleNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="SlotTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SlotType" Relationship="Self.FK_Vehicle_SlotType" FromRole="Vehicle" ToRole="SlotType" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Vehicle_User" FromRole="Vehicle" ToRole="User" />
+          <NavigationProperty Name="VehicleSlots" Relationship="ParkingLotDataModel.FK_VehicleSlot_Vehicle" FromRole="Vehicle" ToRole="VehicleSlot" />
+        </EntityType>
+        <Association Name="FK_Slot_SlotType">
+          <End Role="SlotType" Type="Self.SlotType" Multiplicity="1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SlotType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="SlotTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slot_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vehicle_SlotType">
+          <End Role="SlotType" Type="Self.SlotType" Multiplicity="1" />
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SlotType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vehicle">
+              <PropertyRef Name="SlotTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vehicle_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vehicle">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ParkingLotEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Slots" EntityType="Self.Slot" />
+          <EntitySet Name="SlotTypes" EntityType="Self.SlotType" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
+          <AssociationSet Name="FK_Slot_SlotType" Association="Self.FK_Slot_SlotType">
+            <End Role="SlotType" EntitySet="SlotTypes" />
+            <End Role="Slot" EntitySet="Slots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slot_User" Association="Self.FK_Slot_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Slot" EntitySet="Slots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehicle_SlotType" Association="Self.FK_Vehicle_SlotType">
+            <End Role="SlotType" EntitySet="SlotTypes" />
+            <End Role="Vehicle" EntitySet="Vehicles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehicle_User" Association="Self.FK_Vehicle_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Vehicle" EntitySet="Vehicles" />
+          </AssociationSet>
+          <EntitySet Name="VehicleSlots" EntityType="ParkingLotDataModel.VehicleSlot" />
+          <AssociationSet Name="FK_VehicleSlot_Slot" Association="ParkingLotDataModel.FK_VehicleSlot_Slot">
+            <End Role="Slot" EntitySet="Slots" />
+            <End Role="VehicleSlot" EntitySet="VehicleSlots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehicleSlot_Vehicle" Association="ParkingLotDataModel.FK_VehicleSlot_Vehicle">
+            <End Role="Vehicle" EntitySet="Vehicles" />
+            <End Role="VehicleSlot" EntitySet="VehicleSlots" />
+          </AssociationSet>
+          <EntitySet Name="ReservationTypes" EntityType="ParkingLotDataModel.ReservationType" />
+          <AssociationSet Name="FK_Slot_ReservationType" Association="ParkingLotDataModel.FK_Slot_ReservationType">
+            <End Role="ReservationType" EntitySet="ReservationTypes" />
+            <End Role="Slot" EntitySet="Slots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_ReservationType" Association="ParkingLotDataModel.FK_User_ReservationType">
+            <End Role="ReservationType" EntitySet="ReservationTypes" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="VehicleSlot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VehicleId" Type="Int32" Nullable="false" />
+          <Property Name="SlotId" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Slot" Relationship="ParkingLotDataModel.FK_VehicleSlot_Slot" FromRole="VehicleSlot" ToRole="Slot" />
+          <NavigationProperty Name="Vehicle" Relationship="ParkingLotDataModel.FK_VehicleSlot_Vehicle" FromRole="VehicleSlot" ToRole="Vehicle" />
+        </EntityType>
+        <Association Name="FK_VehicleSlot_Slot">
+          <End Type="ParkingLotDataModel.Slot" Role="Slot" Multiplicity="1" />
+          <End Type="ParkingLotDataModel.VehicleSlot" Role="VehicleSlot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slot">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehicleSlot">
+              <PropertyRef Name="SlotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VehicleSlot_Vehicle">
+          <End Type="ParkingLotDataModel.Vehicle" Role="Vehicle" Multiplicity="1" />
+          <End Type="ParkingLotDataModel.VehicleSlot" Role="VehicleSlot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehicleSlot">
+              <PropertyRef Name="VehicleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ReservationType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Slots" Relationship="ParkingLotDataModel.FK_Slot_ReservationType" FromRole="ReservationType" ToRole="Slot" />
+          <NavigationProperty Name="Users" Relationship="ParkingLotDataModel.FK_User_ReservationType" FromRole="ReservationType" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Slot_ReservationType">
+          <End Type="ParkingLotDataModel.ReservationType" Role="ReservationType" Multiplicity="1" />
+          <End Type="ParkingLotDataModel.Slot" Role="Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReservationType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="ReservationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_ReservationType">
+          <End Type="ParkingLotDataModel.ReservationType" Role="ReservationType" Multiplicity="1" />
+          <End Type="ParkingLotDataModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReservationType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ReservationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ParkingLotDataModelStoreContainer" CdmEntityContainer="ParkingLotEntities">
+          <EntitySetMapping Name="Slots">
+            <EntityTypeMapping TypeName="ParkingLotDataModel.Slot">
+              <MappingFragment StoreEntitySet="Slot">
+                <ScalarProperty Name="ReservationTypeId" ColumnName="ReservationTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SlotTypeId" ColumnName="SlotTypeId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SlotTypes">
+            <EntityTypeMapping TypeName="ParkingLotDataModel.SlotType">
+              <MappingFragment StoreEntitySet="SlotType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PricePerMinute" ColumnName="PricePerMinute" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ParkingLotDataModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ReservationTypeId" ColumnName="ReservationTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Firstname" ColumnName="Firstname" />
+                <ScalarProperty Name="Lastname" ColumnName="Lastname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehicles">
+            <EntityTypeMapping TypeName="ParkingLotDataModel.Vehicle">
+              <MappingFragment StoreEntitySet="Vehicle">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SlotTypeId" ColumnName="SlotTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VehicleSlots">
+            <EntityTypeMapping TypeName="ParkingLotDataModel.VehicleSlot">
+              <MappingFragment StoreEntitySet="VehicleSlot">
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="SlotId" ColumnName="SlotId" />
+                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReservationTypes">
+            <EntityTypeMapping TypeName="ParkingLotDataModel.ReservationType">
+              <MappingFragment StoreEntitySet="ReservationType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

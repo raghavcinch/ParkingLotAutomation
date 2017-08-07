@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.API", "ParkingLot\ParkingLot.API.csproj", "{8BB3EE79-41E0-4F6F-98AB-D15D82D1A4BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.Core", "ParkingLot.Core\ParkingLot.Core.csproj", "{8711B80E-8CB1-48E2-A102-0965F057199D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.SQL", "ParkingLot.SQLite\ParkingLot.SQL.csproj", "{61DBEFA2-1ECB-4D9B-8B77-FB6FCF2C3717}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.Data", "ParkingLot.Data\ParkingLot.Data.csproj", "{D9FBBE2C-9977-44DB-9678-45A054582223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.IOC", "ParkingLot.IOC\ParkingLot.IOC.csproj", "{1AE447A9-B6E6-4F70-B2A7-3912186563E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.Test", "ParkingLot.Test\ParkingLot.Test.csproj", "{87A3EC57-21DB-4AB7-8040-02F8DA308845}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingLot.UI", "ParkingLot.UI\ParkingLot.UI.csproj", "{2456C379-A34B-4790-A88D-92E2B4C899C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BB3EE79-41E0-4F6F-98AB-D15D82D1A4BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB3EE79-41E0-4F6F-98AB-D15D82D1A4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB3EE79-41E0-4F6F-98AB-D15D82D1A4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB3EE79-41E0-4F6F-98AB-D15D82D1A4BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8711B80E-8CB1-48E2-A102-0965F057199D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8711B80E-8CB1-48E2-A102-0965F057199D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8711B80E-8CB1-48E2-A102-0965F057199D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8711B80E-8CB1-48E2-A102-0965F057199D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61DBEFA2-1ECB-4D9B-8B77-FB6FCF2C3717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DBEFA2-1ECB-4D9B-8B77-FB6FCF2C3717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DBEFA2-1ECB-4D9B-8B77-FB6FCF2C3717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DBEFA2-1ECB-4D9B-8B77-FB6FCF2C3717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9FBBE2C-9977-44DB-9678-45A054582223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9FBBE2C-9977-44DB-9678-45A054582223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9FBBE2C-9977-44DB-9678-45A054582223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9FBBE2C-9977-44DB-9678-45A054582223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AE447A9-B6E6-4F70-B2A7-3912186563E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE447A9-B6E6-4F70-B2A7-3912186563E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AE447A9-B6E6-4F70-B2A7-3912186563E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AE447A9-B6E6-4F70-B2A7-3912186563E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87A3EC57-21DB-4AB7-8040-02F8DA308845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87A3EC57-21DB-4AB7-8040-02F8DA308845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87A3EC57-21DB-4AB7-8040-02F8DA308845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87A3EC57-21DB-4AB7-8040-02F8DA308845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2456C379-A34B-4790-A88D-92E2B4C899C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2456C379-A34B-4790-A88D-92E2B4C899C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2456C379-A34B-4790-A88D-92E2B4C899C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2456C379-A34B-4790-A88D-92E2B4C899C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

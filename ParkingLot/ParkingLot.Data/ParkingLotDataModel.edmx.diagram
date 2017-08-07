@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="cf75a2eb996e4410820d807747dce94e" Name="Diagram1">
+        <EntityTypeShape EntityType="ParkingLotDataModel.Slot" Width="1.5" PointX="4.625" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingLotDataModel.SlotType" Width="1.5" PointX="2.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingLotDataModel.User" Width="1.5" PointX="0.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingLotDataModel.Vehicle" Width="1.5" PointX="2.625" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_Slot_SlotType" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_Slot_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_Vehicle_SlotType" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_Vehicle_User" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ParkingLotDataModel.VehicleSlot" Width="1.5" PointX="4.75" PointY="6.5" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_VehicleSlot_Slot" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_VehicleSlot_Vehicle" />
+        <EntityTypeShape EntityType="ParkingLotDataModel.ReservationType" Width="1.5" PointX="0.625" PointY="0.5" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_Slot_ReservationType" />
+        <AssociationConnector Association="ParkingLotDataModel.FK_User_ReservationType" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
